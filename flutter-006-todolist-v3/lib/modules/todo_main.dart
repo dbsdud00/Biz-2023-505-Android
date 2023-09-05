@@ -20,7 +20,7 @@ class _StartPage extends State<StartPage> {
   Todo getTodo(String content) {
     return Todo(
       sdate: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-      stime: DateFormat("HH:ss:mm").format(DateTime.now()),
+      stime: DateFormat("HH:mm:ss").format(DateTime.now()),
       content: content,
       complete: false,
     );
@@ -87,14 +87,15 @@ class _StartPage extends State<StartPage> {
                 ),
               ),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   var todo = getTodo(todoContent);
+                  await TodoService().insert(todo);
                   setState(() {
-                    // todoList.add(todo);
-                    TodoService().insert(todo);
+                    // 입력이 완료된 후 키보드 자동으로 감추기
+                    FocusScope.of(context).unfocus();
                     todoContent = "";
-                    inputController.clear();
                   });
+                  inputController.clear();
                 },
                 icon: const Icon(Icons.send_outlined),
               )
@@ -171,22 +172,27 @@ class _StartPage extends State<StartPage> {
             /// 사라지기 전의 event
             /// event 핸들러에서 Future.value(true) 를 return 하면
             /// swipe 행위가 진행되고, false 를 return 하면 진행을 멈춘다
-            confirmDismiss: (direction) => onConfirmHandler(direction, index),
+            confirmDismiss: (direction) =>
+                onConfirmHandler(direction, todoList[index]),
 
             /// confirmDismiss 에서 true 가 return 되었을때 할일
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
+              // 완료 설정
               if (direction == DismissDirection.startToEnd) {
-                debugPrint("여기로 들어왔다");
-                setState(() {
-                  todoList[index].complete = !todoList[index].complete;
-                });
+                var todo = todoList[index];
+                todo.complete = !todo.complete;
+                await TodoService().update(todo);
+                debugPrint("완료처리");
+                setState(() {});
+                // 삭제하기
               } else if (direction == DismissDirection.endToStart) {
+                var content = todoList[index].content;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("${todoList[index].content} 를 삭제하였습니다"),
+                  content: Text("$content 를 삭제하였습니다"),
                 ));
-                int id = todoList[index].id ?? 0;
-                TodoService().delete(id);
-                debugPrint("삭제 : $id");
+                // DB PK 값을 delete 에게 직접 전달하기
+                await TodoService().delete(todoList[index].id ?? 0);
+                debugPrint("삭제됨");
                 setState(() {
                   // todoList.removeAt(index);
                 });
@@ -235,9 +241,9 @@ class _StartPage extends State<StartPage> {
     );
   }
 
-  Future<bool?> onConfirmHandler(direction, index) {
+  Future<bool?> onConfirmHandler(direction, Todo todo) {
     if (direction == DismissDirection.startToEnd) {
-      return completeConfirm(index);
+      return completeConfirm(todo);
     } else if (direction == DismissDirection.endToStart) {
       return deleteConfirm();
     }
@@ -252,14 +258,17 @@ class _StartPage extends State<StartPage> {
         title: const Text("삭제할까요??"),
         actions: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop(true);
+              debugPrint("삭제할까요 예 누름");
+              await Future.delayed(const Duration(seconds: 1));
             },
             child: const Text("예"),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop(false);
+              debugPrint("삭제할까요 아니오 누름");
             },
             child: const Text("아니오"),
           )
@@ -268,8 +277,9 @@ class _StartPage extends State<StartPage> {
     );
   }
 
-  Future<bool?> completeConfirm(index) {
-    var yesNo = todoList[index].complete ? "완료처리를 취소할까요??" : "완료처리를 할까요?";
+  Future<bool?> completeConfirm(Todo todo) {
+    var yesNo = todo.complete ? "완료처리를 취소할까요??" : "완료처리를 할까요?";
+    // var yesNo = "완료확인";
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
