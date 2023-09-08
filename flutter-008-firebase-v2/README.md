@@ -17,7 +17,7 @@
 ## flutter 와 firebase 를 연동하기 위하여 사전 도구 설치
 
 - Cli 도구 설치 : `npm install -g firebase-tools@latest`
-- 설치 확인 : `firebase --version`
+- 설치 확인 : `firebase --versioin`
 
 ## firebase 프로젝트 생성하기
 
@@ -53,4 +53,19 @@ flutter pub add firebase_auth
 flutter pub upgrade outdated package
 flutter clean
 flutter pub get
+```
+
+## 배포시 Dex 오류 발생하는 경우
+
+- `project/android/app/build.gradle` 파일을 찾는다.
+- 파일에서 `defaultConfig` 항목을 찾는다. `multiDexEnabled true` 추가
+
+```kt
+    defaultConfig {
+        .
+        .
+        .
+        versionName flutterVersionName
+        multiDexEnabled true
+    }
 ```
