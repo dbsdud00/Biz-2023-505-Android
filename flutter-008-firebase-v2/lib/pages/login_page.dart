@@ -76,19 +76,31 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         onPressed: () async {
-          _formKey.currentState?.validate();
-          var result = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailValue,
-            password: _passwordValue,
-          );
-          debugPrint("------------------$result");
-          widget.updateAuthUser(result.user);
-          // setState(() {});
-          if (!mounted) return;
-          // result.user != null ? true : false
-          // Navigator.pop(context, 데이터) : 현재 화면이 닫힐때
-          // 현재 화면을 열었던 곳으로 `데이터` 를 return
-          Navigator.pop(context, result.user != null);
+          try {
+            _formKey.currentState?.validate();
+            var result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailValue,
+              password: _passwordValue,
+            );
+            debugPrint("------------------$result");
+            widget.updateAuthUser(result.user);
+            // setState(() {});
+            // 화면전환, SnackBar 등을 화면에 표현하고자 할때
+            // Don't use BuildContext ... 의 경고가 나타날 때
+            // 아래의 코드를 먼저 실행하도록 추가한다.
+            // BuildContext(context) 가 사라질 수도 있는데
+            // 사용상 주의하라는 경고
+            // mounted 라는 시스템 변수가 생성되었는지
+            // context 관련 코드를 실행하라는
+            if (!mounted) return;
+            // result.user != null ? true : false
+            // Navigator.pop(context, 데이터) : 현재 화면이 닫힐때
+            // 현재 화면을 열었던 곳으로 `데이터` 를 return
+            Navigator.pop(context, result.user != null);
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Text")));
+          }
         },
         child: const SizedBox(
           width: double.infinity,
