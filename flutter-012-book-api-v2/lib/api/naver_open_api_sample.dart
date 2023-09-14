@@ -5,20 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // ignore_for_file: constant_identifier_names
 
-const CLIENT_ID = "ZhDj52aRVng9YcfGXASG";
-const CLIENT_SECRET = "UfCwODosjs";
+/// Naver 개발자 센터에 애플리케이션을 등록하고
+/// Client_ID 와 Client_Secret 을 확인하고
+/// 아래 항목에 설정한 후
+/// api/naver_open_api.dart 로 이름을 변경한 후
+///
+const CLIENT_ID = "YOUR NAVER CLIENT ID";
+const CLIENT_SECRET = "YOUR NAVER CLIENT SECRET";
 const NAVER_BOOK_URL = "https://openapi.naver.com/v1/search/book.json";
 
 class NaverOpenAPI {
-  /// Naver 개발자 센터에 애플리케이션을 등록하고
-  /// Client_ID 와 Client_Secret 을 확인하고
-  /// 아래 항목에 설정한 후
-  /// api/naver_open_api.dart 로 이름을 변경한 후
-  ///
   Future<List<NaverBookDto>> loadBooks([search]) async {
     Map<String, String> headers = {
-      "X-Naver-Client-Id": "YOUR NAVER CLIENT ID",
-      "X-Naver-Client-Secret": "YOUR NAVER CLIENT SECRET",
+      "X-Naver-Client-Id": CLIENT_ID,
+      "X-Naver-Client-Secret": CLIENT_SECRET,
     };
     String query = search ??= "자바";
 
