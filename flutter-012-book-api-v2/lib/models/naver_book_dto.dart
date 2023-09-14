@@ -23,6 +23,9 @@ class NaverBookDto {
   }); //
 
   // jsonToDto(jsonToMap)
+  // 데이터를 CU(Create:insert, Update: Update)를 해야하는 경우
+  // 주로 NoSQL DB 에 저장할 때 Dto 데이터를 Map 형식으로 변환한다.
+  // Map 형식으로 변환된 데이터는 JSON type 으로 쉽게 변환이 가능하다.
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["title"] = title;
@@ -38,6 +41,7 @@ class NaverBookDto {
   }
 
   // DtoToJson(FromMap)
+  // openAPI 를 통하여 받은 JSON 데이터를 dto 객체로 변환시키는 method
   NaverBookDto.fromJson(Map<String, dynamic> json) {
     title = json["title"];
     link = json["link"];
