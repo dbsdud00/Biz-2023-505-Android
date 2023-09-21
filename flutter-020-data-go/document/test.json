@@ -1,0 +1,42 @@
+[
+  {
+    "STATION_NUM": 1,
+    "BUSSTOP_NAME": "동원촌",
+    "ARS_ID": "5396",
+    "NEXT_BUSSTOP": "비아동주민센터(앞)",
+    "BUSSTOP_ID": 2513,
+    "LONGITUDE": 126.82839444,
+    "NAME_E": "Dongwonchon",
+    "LATITUDE": 35.221225
+  },
+  {
+    "STATION_NUM": 2,
+    "BUSSTOP_NAME": "첨단1동행정복지센터",
+    "ARS_ID": "5409",
+    "NEXT_BUSSTOP": "광주교통방송/광주디자인센터",
+    "BUSSTOP_ID": 2534,
+    "LONGITUDE": 126.84211,
+    "NAME_E": "Cheomdan 1(il)-dong Administration Welfare Center",
+    "LATITUDE": 35.218626
+  },
+  {
+    "STATION_NUM": 3,
+    "BUSSTOP_NAME": "남계(장성)",
+    "ARS_ID": "6245",
+    "NEXT_BUSSTOP": "매화동(장성)",
+    "BUSSTOP_ID": 196,
+    "LONGITUDE": 126.82940556,
+    "NAME_E": "Namgye (Jangseong)",
+    "LATITUDE": 35.26986667
+  },
+  {
+    "STATION_NUM": 4,
+    "BUSSTOP_NAME": "싸이클경기장",
+    "ARS_ID": "6063",
+    "NEXT_BUSSTOP": "정렬사사거리",
+    "BUSSTOP_ID": 3447,
+    "LONGITUDE": 126.71840833,
+    "NAME_E": "Cycle Stadium",
+    "LATITUDE": 35.04589722
+  }
+]
